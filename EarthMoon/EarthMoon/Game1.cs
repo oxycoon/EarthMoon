@@ -16,6 +16,9 @@ namespace EarthMoon
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
+        private int selectedPlanet = 0;
+
+        private const float SUNSIZE = 696342;
         private GraphicsDeviceManager graphics;
         private ContentManager content;
         private GraphicsDevice device;
@@ -29,6 +32,7 @@ namespace EarthMoon
         private Vector3 camPos = new Vector3(700.0f, 10.0f, 0.0f);
         private Vector3 camTar = Vector3.Zero;
         private Vector3 camUpVec = Vector3.Up;
+        private float cameraX, cameraY, cameraZ;
 
         private SpriteBatch spriteBatch;
 
@@ -45,15 +49,15 @@ namespace EarthMoon
 
         // Planets
         private Planet[] planetArray = new Planet[8];
-        
-        private float re_mercury = 2439.7f, rp_mercury = 2439.7f;        //radius for mercury
-        private float re_venus = 6051.8f, rp_venus = 6051.8f;            //radius for venus
-        private float re_terra = 6378.1f, rp_terra = 6356.8f;            //radius for earth
-        private float re_mars = 3396.2f, rp_mars = 3376.2f;              //radius for mars
-        private float re_jupiter = 71492.0f, rp_jupiter = 66854.0f;      //radius for jupiter
-        private float re_saturn = 60268.0f, rp_saturn = 54364.0f;        //radius for saturn
-        private float re_uranus = 25559.0f, rp_uranus = 24973.0f;        //radius for uranus
-        private float re_neptune = 24764.0f, rp_neptune = 24341.0f;      //radius for neptune
+
+        private float[] scaleMercury = { 690000.7f, 690000.7f };        //radius for mercury 0 is x, z and 1 is y
+        private float[] scaleVenus = {6051.8f, 6051.8f};            //radius for venus
+        private float[] scaleTerra = {6378.1f, 6356.8f};            //radius for earth
+        private float[] scaleMars = {3396.2f, 3376.2f};              //radius for mars
+        private float[] scaleJupiter = {71492.0f, 66854.0f};      //radius for jupiter
+        private float[] scaleSaturn = {60268.0f, 54364.0f};        //radius for saturn
+        private float[] scaleUranus = {25559.0f, 24973.0f};        //radius for uranus
+        private float[] scaleNeptune = {24764.0f, 24341.0f};      //radius for neptune
 
         private float dc_mercury = 6.98f * (float)Math.Pow(10, 7), df_mercury = 4.60f * (float)Math.Pow(10, 7);     //distance from sol at closest and furthest
         private float dc_venus = 1.075f * (float)Math.Pow(10, 8), df_venus = 1.098f * (float)Math.Pow(10, 8);       //distance from sol at closest and furthest
@@ -113,24 +117,24 @@ namespace EarthMoon
             Uranus =    new Planet("Uranus", temp, 0.5f, new Vector3(35.0f, 0.0f, 0.0f), 0.4f, 4.4f);
             Neptun =    new Planet("Neptun", temp, 0.5f, new Vector3(40.0f, 0.0f, 0.0f), 0.4f, 4.4f);
             */
-            //                          Name        Model Scale    Distance from sun                RS    OS
-            planetArray[0] = new Planet("Mercury", temp, 1f, new Vector3(50.0f, 0.0f, 0.0f), 0.4f, 0.7f, 0);
-            planetArray[1] = new Planet("Venus", temp, 1f, new Vector3(75.0f, 0.0f, 0.0f), 0.4f, 0.6f, 0);
+            //Name, Model, Scale, DistanceFromSun, RS, OS, moonCount
+            planetArray[0] = new Planet("Mercury", temp, scaleMercury, new Vector3(50.0f, 0.0f, 0.0f), 0.0001f, 0.0001f, 0);
+            planetArray[1] = new Planet("Venus", temp, scaleVenus, new Vector3(75.0f, 0.0f, 0.0f), 0.4f, 0.6f, 0);
 
-            planetArray[2] = new Planet("Earth", temp, 1.0f, new Vector3(100.0f, 0.0f, 0.0f), 0.06f, 0.01f, 1);
+            planetArray[2] = new Planet("Earth", temp, scaleTerra, new Vector3(100.0f, 0.0f, 0.0f), 0.06f, 0.01f, 1);
             planetArray[2].MoonArray[0] = new Moon("The Moon", temp, 0.5f, new Vector3(2.0f, 0.0f, 0.0f), 0.1f, 0.1f);
 
-            planetArray[3] = new Planet("Mars", temp, 1f, new Vector3(125.0f, 0.0f, 0.0f), 0.4f, 0.05f, 2);
+            planetArray[3] = new Planet("Mars", temp, scaleMars, new Vector3(125.0f, 0.0f, 0.0f), 0.4f, 0.05f, 2);
             planetArray[3].MoonArray[0] = new Moon("Deimos", temp, 0.5f, new Vector3(2.0f, 0.0f, 0.0f), 0.1f, 2.0f);
             planetArray[3].MoonArray[1] = new Moon("Phobos", temp, 0.5f, new Vector3(4.0f, 0.0f, 0.0f), 0.1f, 0.1f);
 
-            planetArray[4] = new Planet("Jupiter", temp, 1f, new Vector3(150.0f, 0.0f, 0.0f), 0.4f, 0.04f, 4);
+            planetArray[4] = new Planet("Jupiter", temp, scaleJupiter, new Vector3(150.0f, 0.0f, 0.0f), 0.4f, 0.04f, 4);
             planetArray[4].MoonArray[0] = new Moon("Lo", temp, 0.5f, new Vector3(1.0f, 0.0f, 0.0f), 0.1f, 1.0f);
             planetArray[4].MoonArray[1] = new Moon("Europa", temp, 0.5f, new Vector3(3.0f, 0.0f, 0.0f), 0.1f, 0.2f);
             planetArray[4].MoonArray[2] = new Moon("Genymede", temp, 0.5f, new Vector3(5.0f, 0.0f, 0.0f), 0.1f, 0.7f);
             planetArray[4].MoonArray[3] = new Moon("Callisto", temp, 0.5f, new Vector3(7.0f, 0.0f, 0.0f), 0.1f, 0.1f);
 
-            planetArray[5] = new Planet("Saturn", temp, 1f, new Vector3(175.0f, 0.0f, 0.0f), 0.4f, 0.03f, 9);
+            planetArray[5] = new Planet("Saturn", temp, scaleSaturn, new Vector3(175.0f, 0.0f, 0.0f), 0.4f, 0.03f, 9);
             planetArray[5].MoonArray[0] = new Moon("Mimas", temp, 0.5f, new Vector3(1.0f, 0.0f, 0.0f), 0.1f, 0.1f);
             planetArray[5].MoonArray[1] = new Moon("Enceladus", temp, 0.5f, new Vector3(2.0f, 0.0f, 0.0f), 0.1f, 0.2f);
             planetArray[5].MoonArray[2] = new Moon("Tethys", temp, 0.5f, new Vector3(3.0f, 0.0f, 0.0f), 0.1f, 0.3f);
@@ -141,7 +145,7 @@ namespace EarthMoon
             planetArray[5].MoonArray[7] = new Moon("Lapetus", temp, 0.5f, new Vector3(8.0f, 0.0f, 0.0f), 0.1f, 0.8f);
             planetArray[5].MoonArray[8] = new Moon("Phoebe", temp, 0.5f, new Vector3(9.0f, 0.0f, 0.0f), 0.1f, 0.9f);
 
-            planetArray[6] = new Planet("Uranus",   temp,  1f, new Vector3(200.0f, 0.0f, 0.0f), 0.4f, 0.02f, 6);
+            planetArray[6] = new Planet("Uranus",   temp, scaleUranus, new Vector3(200.0f, 0.0f, 0.0f), 0.4f, 0.02f, 6);
             planetArray[6].MoonArray[0] = new Moon("Puck", temp, 0.5f, new Vector3(1.0f, 0.0f, 0.0f), 0.1f, 0.2f);
             planetArray[6].MoonArray[1] = new Moon("Miranda", temp, 0.5f, new Vector3(2.0f, 0.0f, 0.0f), 0.1f, 0.5f);
             planetArray[6].MoonArray[2] = new Moon("Ariel", temp, 0.5f, new Vector3(3.0f, 0.0f, 0.0f), 0.1f, 0.3f);
@@ -149,7 +153,7 @@ namespace EarthMoon
             planetArray[6].MoonArray[4] = new Moon("Titania", temp, 0.5f, new Vector3(5.0f, 0.0f, 0.0f), 0.1f, 0.1f);
             planetArray[6].MoonArray[5] = new Moon("Oberon", temp, 0.5f, new Vector3(6.0f, 0.0f, 0.0f), 0.1f, 0.4f);
 
-            planetArray[7] = new Planet("Neptun",   temp,  1f, new Vector3(225.0f, 0.0f, 0.0f), 0.4f, 0.01f, 3);
+            planetArray[7] = new Planet("Neptune",   temp,  scaleNeptune, new Vector3(225.0f, 0.0f, 0.0f), 0.4f, 0.01f, 3);
             planetArray[7].MoonArray[0] = new Moon("Proteus", temp, 0.5f, new Vector3(1.0f, 0.0f, 0.0f), 0.1f, 0.5f);
             planetArray[7].MoonArray[1] = new Moon("Triton", temp, 0.5f, new Vector3(2.0f, 0.0f, 0.0f), 0.1f, 0.2f);
             planetArray[7].MoonArray[2] = new Moon("Nereid", temp, 0.5f, new Vector3(3.0f, 0.0f, 0.0f), 0.1f, 1.0f);
@@ -254,43 +258,76 @@ namespace EarthMoon
 
             // TODO: Add your update logic here
             kbState = Keyboard.GetState();
-
-            if (kbState.IsKeyDown(Keys.Down))
+            if (selectedPlanet == 0)
             {
-                camPos.X += 10.0f;
-                camTar.X += 10.0f;  
-            }
+                if (kbState.IsKeyDown(Keys.Down))
+                {
+                    camPos.X += 10.0f;
+                    camTar.X += 10.0f;
+                }
 
-            if (kbState.IsKeyDown(Keys.Up))
+                if (kbState.IsKeyDown(Keys.Up))
+                {
+                    camPos.X -= 10.0f;
+                    camTar.X -= 10.0f;
+                }
+
+                if (kbState.IsKeyDown(Keys.Left))
+                {
+                    camPos.Z += 10.0f;
+                    camTar.Z += 10.0f;
+                }
+
+                if (kbState.IsKeyDown(Keys.Right))
+                {
+                    camPos.Z -= 10.0f;
+                    camTar.Z -= 10.0f;
+                }
+
+                if (kbState.IsKeyDown(Keys.Q))
+                {
+                    camPos.Y += 0.2f;
+                    camTar.Y += 0.2f;
+                }
+
+                if (kbState.IsKeyDown(Keys.E))
+                {
+                    camPos.Y -= 0.2f;
+                    camTar.Y -= 0.2f;
+                }
+            }
+            else 
             {
-                camPos.X -= 10.0f;
-                camTar.X -= 10.0f;
-            }
+                if (kbState.IsKeyDown(Keys.Down))
+                {
+                    cameraX += 10.0f;
+                }
 
-            if (kbState.IsKeyDown(Keys.Left))
-            {
-                camPos.Z += 10.0f;
-                camTar.Z += 10.0f;
-            }
+                if (kbState.IsKeyDown(Keys.Up))
+                {
+                    cameraX -= 10.0f;
+                }
 
-            if (kbState.IsKeyDown(Keys.Right))
-            {
-                camPos.Z -= 10.0f;
-                camTar.Z -= 10.0f;
-            }
+                if (kbState.IsKeyDown(Keys.Left))
+                {
+                    cameraZ += 10.0f;
+                }
 
-            if (kbState.IsKeyDown(Keys.Q))
-            {
-                camPos.Y += 0.2f;
-                camTar.Y += 0.2f;
-            }
+                if (kbState.IsKeyDown(Keys.Right))
+                {
+                    cameraZ -= 10.0f;
+                }
 
-            if (kbState.IsKeyDown(Keys.E))
-            {
-                camPos.Y -= 0.2f;
-                camTar.Y -= 0.2f;
-            }
+                if (kbState.IsKeyDown(Keys.Q))
+                {
+                    cameraY += 0.2f;
+                }
 
+                if (kbState.IsKeyDown(Keys.E))
+                {
+                    cameraY -= 0.2f;
+                }
+            }
             if (kbState.IsKeyDown(Keys.Escape))
             {
                 if(isFullScreen)
@@ -305,8 +342,58 @@ namespace EarthMoon
                 graphics.ApplyChanges();
             }
 
+            if (kbState.IsKeyDown(Keys.D1))
+            {
+                cameraX = 0.0f;
+                cameraY = 10.0f;
+                cameraZ = 0.0f;
+
+                //cameraX = planetArray[0].PlanetPosition.X + planetArray[0].PlanetScale[0] + 50.0f;
+                //cameraY = planetArray[0].PlanetPosition.X + planetArray[0].PlanetScale[0] + 50.0f;
+                //cameraZ = planetArray[0].PlanetPosition.X + planetArray[0].PlanetScale[0] + 50.0f;
+
+                selectedPlanet = 1;
+            }
+            if (kbState.IsKeyDown(Keys.D2))
+            {
+                selectedPlanet = 2;
+            }
+            if (kbState.IsKeyDown(Keys.D3))
+            {
+                selectedPlanet = 3;
+            }
+            if (kbState.IsKeyDown(Keys.D4))
+            {
+                selectedPlanet = 4;
+            }
+            if (kbState.IsKeyDown(Keys.D5))
+            {
+                selectedPlanet = 6;
+            }
+
+            if (kbState.IsKeyDown(Keys.D6))
+            {
+                selectedPlanet = 6;
+            }
+            if (kbState.IsKeyDown(Keys.D7))
+            {
+                selectedPlanet = 7;
+            }
+            if (kbState.IsKeyDown(Keys.D8))
+            {
+                selectedPlanet = 8;
+            }
+
+            if (selectedPlanet > 0)
+            {
+                camPos = planetArray[selectedPlanet - 1].PlanetPosition + new Vector3(planetArray[selectedPlanet - 1].PlanetPosition.X + cameraX, 
+                                                                                      planetArray[selectedPlanet - 1].PlanetPosition.Y+ cameraY, 
+                                                                                      planetArray[selectedPlanet - 1].PlanetPosition.Z + cameraZ);
+                camTar = planetArray[selectedPlanet - 1].PlanetPosition;
+            }
 
             InitCamera();
+
             base.Update(gameTime);
         }
 
@@ -343,10 +430,12 @@ namespace EarthMoon
             //matrixStrack.Pop();
             spriteBatch.Begin();
             float y = 0.0f;
-            spriteBatch.DrawString(font, planetArray[2].PlanetName + ": " + planetArray[2].MoonArray[0].MoonOrbitY, new Vector2(0.0f, 0.0f), Color.WhiteSmoke);
             foreach (Planet p in planetArray)
             {
-                spriteBatch.DrawString(font, p.PlanetName + ": " + p.PlanetOrbitY, new Vector2(0.0f, y += 20), Color.WhiteSmoke);
+                spriteBatch.DrawString(font, p.PlanetName + "-X: " + p.PlanetPosition.X, new Vector2(0.0f, y += 20), Color.WhiteSmoke);
+                spriteBatch.DrawString(font, p.PlanetName + "-Y: " + p.PlanetPosition.Y, new Vector2(0.0f, y += 20), Color.WhiteSmoke);
+                spriteBatch.DrawString(font, p.PlanetName + "-Z: " + p.PlanetPosition.Z, new Vector2(0.0f, y += 20), Color.WhiteSmoke);
+                y += 20;
             }
             spriteBatch.End();
             base.Draw(gameTime);
@@ -376,11 +465,11 @@ namespace EarthMoon
             Matrix matRotateY, matScale, matOrbTranslation, matOrbRotation;
             Matrix _world = matrixStrack.Peek();
 
-            matScale = Matrix.CreateScale(planet.PlanetScale);
+            matScale = Matrix.CreateScale(planet.PlanetScale[0] / SUNSIZE, planet.PlanetScale[1] / SUNSIZE, planet.PlanetScale[0] / SUNSIZE);
 
 
             matRotateY = Matrix.CreateRotationY(planet.PlanetRotY);
-            planet.PlanetRotY += (float)gameTime.ElapsedGameTime.Milliseconds / 50.0f;
+            planet.PlanetRotY += (float)gameTime.ElapsedGameTime.Milliseconds / 5000.0f;
             planet.PlanetRotY = planet.PlanetRotY % (float)(2 * Math.PI);
 
             matOrbTranslation = Matrix.CreateTranslation(planet.PlanetDistanceToSun);
@@ -393,6 +482,9 @@ namespace EarthMoon
             matrixStrack.Push(world);
 
             effect.World = world;
+
+            planet.PlanetPosition = Matrix.Invert(world).Translation;
+
             mStar.Draw(world, view, projection);
 
         }
