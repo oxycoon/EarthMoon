@@ -51,13 +51,13 @@ namespace EarthMoon
         private Planet[] planetArray = new Planet[8];
 
         private float[] scaleMercury = { 690000.7f, 690000.7f };        //radius for mercury 0 is x, z and 1 is y
-        private float[] scaleVenus = {6051.8f, 6051.8f};            //radius for venus
-        private float[] scaleTerra = {6378.1f, 6356.8f};            //radius for earth
-        private float[] scaleMars = {3396.2f, 3376.2f};              //radius for mars
-        private float[] scaleJupiter = {71492.0f, 66854.0f};      //radius for jupiter
-        private float[] scaleSaturn = {60268.0f, 54364.0f};        //radius for saturn
-        private float[] scaleUranus = {25559.0f, 24973.0f};        //radius for uranus
-        private float[] scaleNeptune = {24764.0f, 24341.0f};      //radius for neptune
+        private float[] scaleVenus = { 690000.7f, 690000.7f };            //radius for venus
+        private float[] scaleTerra = { 690000.7f, 690000.7f };            //radius for earth
+        private float[] scaleMars = { 690000.7f, 690000.7f };              //radius for mars
+        private float[] scaleJupiter = { 690000.7f, 690000.7f };      //radius for jupiter
+        private float[] scaleSaturn = { 690000.7f, 690000.7f };        //radius for saturn
+        private float[] scaleUranus = { 690000.7f, 690000.7f };        //radius for uranus
+        private float[] scaleNeptune = { 690000.7f, 690000.7f };      //radius for neptune
 
         private float dc_mercury = 6.98f * (float)Math.Pow(10, 7), df_mercury = 4.60f * (float)Math.Pow(10, 7);     //distance from sol at closest and furthest
         private float dc_venus = 1.075f * (float)Math.Pow(10, 8), df_venus = 1.098f * (float)Math.Pow(10, 8);       //distance from sol at closest and furthest
@@ -186,7 +186,7 @@ namespace EarthMoon
             graphics.IsFullScreen = isFullScreen;
             graphics.ApplyChanges();
 
-            Window.Title = "En enkel kube...";
+            Window.Title = "Solsystem simulatuuuur";
 
             //Initialiserer Effect-objektet:
             effect = new BasicEffect(graphics.GraphicsDevice);
