@@ -20,8 +20,11 @@ namespace EarthMoon
 
         private const float SUNSIZE = 696342;
         private GraphicsDeviceManager graphics;
-        private ContentManager content;
+        //private ContentManager content;
         private GraphicsDevice device;
+        private Camera camera;
+
+        private InputHandler input;
 
         private SpriteFont font;
 
@@ -29,9 +32,10 @@ namespace EarthMoon
 
         private Matrix world, view, projection;
 
-        private Vector3 camPos = new Vector3(700.0f, 10.0f, 0.0f);
-        private Vector3 camTar = Vector3.Zero;
-        private Vector3 camUpVec = Vector3.Up;
+
+        //private Vector3 camPos = new Vector3(700.0f, 10.0f, 0.0f);
+        //private Vector3 camTar = Vector3.Zero;
+        //private Vector3 camUpVec = Vector3.Up;
         private float cameraX, cameraY, cameraZ;
 
         private SpriteBatch spriteBatch;
@@ -46,18 +50,19 @@ namespace EarthMoon
         private Model mEarth;
         private Model mMoon;
         private Model mStar;
+        private Model temp;
 
         // Planets
         private Planet[] planetArray = new Planet[8];
 
         private float[] scaleMercury = { 690000.7f, 690000.7f };        //radius for mercury 0 is x, z and 1 is y
-        private float[] scaleVenus = {6051.8f, 6051.8f};            //radius for venus
-        private float[] scaleTerra = {6378.1f, 6356.8f};            //radius for earth
-        private float[] scaleMars = {3396.2f, 3376.2f};              //radius for mars
-        private float[] scaleJupiter = {71492.0f, 66854.0f};      //radius for jupiter
-        private float[] scaleSaturn = {60268.0f, 54364.0f};        //radius for saturn
-        private float[] scaleUranus = {25559.0f, 24973.0f};        //radius for uranus
-        private float[] scaleNeptune = {24764.0f, 24341.0f};      //radius for neptune
+        private float[] scaleVenus = { 690000.7f, 690000.7f };            //radius for venus
+        private float[] scaleTerra = { 690000.7f, 690000.7f };            //radius for earth
+        private float[] scaleMars = { 690000.7f, 690000.7f };              //radius for mars
+        private float[] scaleJupiter = { 690000.7f, 690000.7f };      //radius for jupiter
+        private float[] scaleSaturn = { 690000.7f, 690000.7f };        //radius for saturn
+        private float[] scaleUranus = { 690000.7f, 690000.7f };        //radius for uranus
+        private float[] scaleNeptune = { 690000.7f, 690000.7f };      //radius for neptune
 
         private float dc_mercury = 6.98f * (float)Math.Pow(10, 7), df_mercury = 4.60f * (float)Math.Pow(10, 7);     //distance from sol at closest and furthest
         private float dc_venus = 1.075f * (float)Math.Pow(10, 8), df_venus = 1.098f * (float)Math.Pow(10, 8);       //distance from sol at closest and furthest
@@ -85,28 +90,21 @@ namespace EarthMoon
         private float speed_jupiter = 13.0697f;
         private float speed_saturn = 9.6724f;
         private float speed_uranus = 6.8352f;
-        private float speed_neptune = 5.4778f;
-        
-        /*
-        private Planet Mercury;
-        private Planet Venus;
-        private Planet Earth;
-        private Planet Mars;
-        private Planet Jupiter;
-        private Planet Saturn;
-        private Planet Uranus;
-        private Planet Neptun;
-        */
-        private Model temp;
+        private float speed_neptune = 5.4778f;    
 
-        private KeyboardState kbState;
         private bool isFullScreen = false;
-
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            input = new InputHandler(this);
+            this.Components.Add(input);
+
+            camera = new Camera(this);
+            this.Components.Add(camera);
+
             /*
             Mercury =   new Planet("Mercury", temp, 0.5f, new Vector3(5.0f, 0.0f, 0.0f), 0.4f, 4.4f);
             Venus =     new Planet("Venus", temp, 0.5f, new Vector3(10.0f, 0.0f, 0.0f), 0.4f, 4.4f);
@@ -173,7 +171,9 @@ namespace EarthMoon
 
             base.Initialize();
             InitDevice();
-            InitCamera();
+            this.IsMouseVisible = true;
+            
+            //InitCamera();
         }
 
         private void InitDevice()
@@ -186,23 +186,13 @@ namespace EarthMoon
             graphics.IsFullScreen = isFullScreen;
             graphics.ApplyChanges();
 
-            Window.Title = "En enkel kube...";
+            Window.Title = "Solsystem simulatuuuur";
 
             //Initialiserer Effect-objektet:
             effect = new BasicEffect(graphics.GraphicsDevice);
             effect.VertexColorEnabled = false;
         }
 
-        private void InitCamera()
-        {
-            float aspectRatio = (float)graphics.GraphicsDevice.Viewport.Width / (float)graphics.GraphicsDevice.Viewport.Height;
-            Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, aspectRatio, 0.01f, 1000.0f, out projection);
-            Matrix.CreateLookAt(ref camPos, ref camTar, ref camUpVec, out view);
-            effect.Projection = projection;
-            effect.View = view;
-            effect.VertexColorEnabled = true;
-
-        }
 
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
@@ -219,21 +209,11 @@ namespace EarthMoon
             mStar = Content.Load<Model>("sphere");
             (mStar.Meshes[0].Effects[0] as BasicEffect).EnableDefaultLighting();
 
-            //Mercury.PlanetModel = Content.Load<Model>("sphere");
-            //(Mercury.PlanetModel.Meshes[0].Effects[0] as BasicEffect).EnableDefaultLighting();
-
             foreach(Planet p in planetArray)
             {
                 p.PlanetModel = Content.Load<Model>("sphere");
                 (p.PlanetModel.Meshes[0].Effects[0] as BasicEffect).EnableDefaultLighting();
             }
- 
-
-            /*
-            mEarth = Content.Load<Model>("sphere");
-            mMoon = Content.Load<Model>("sphere");
-            (mEarth.Meshes[0].Effects[0] as BasicEffect).EnableDefaultLighting();
-            (mMoon.Meshes[0].Effects[0] as BasicEffect).EnableDefaultLighting();*/
         }
 
         /// <summary>
@@ -257,142 +237,49 @@ namespace EarthMoon
                 this.Exit();
 
             // TODO: Add your update logic here
-            kbState = Keyboard.GetState();
-            if (selectedPlanet == 0)
+
+           
+            if (input.KeyboardState.IsKeyDown(Keys.D1))
             {
-                if (kbState.IsKeyDown(Keys.Down))
-                {
-                    camPos.X += 10.0f;
-                    camTar.X += 10.0f;
-                }
-
-                if (kbState.IsKeyDown(Keys.Up))
-                {
-                    camPos.X -= 10.0f;
-                    camTar.X -= 10.0f;
-                }
-
-                if (kbState.IsKeyDown(Keys.Left))
-                {
-                    camPos.Z += 10.0f;
-                    camTar.Z += 10.0f;
-                }
-
-                if (kbState.IsKeyDown(Keys.Right))
-                {
-                    camPos.Z -= 10.0f;
-                    camTar.Z -= 10.0f;
-                }
-
-                if (kbState.IsKeyDown(Keys.Q))
-                {
-                    camPos.Y += 0.2f;
-                    camTar.Y += 0.2f;
-                }
-
-                if (kbState.IsKeyDown(Keys.E))
-                {
-                    camPos.Y -= 0.2f;
-                    camTar.Y -= 0.2f;
-                }
-            }
-            else 
-            {
-                if (kbState.IsKeyDown(Keys.Down))
-                {
-                    cameraX += 10.0f;
-                }
-
-                if (kbState.IsKeyDown(Keys.Up))
-                {
-                    cameraX -= 10.0f;
-                }
-
-                if (kbState.IsKeyDown(Keys.Left))
-                {
-                    cameraZ += 10.0f;
-                }
-
-                if (kbState.IsKeyDown(Keys.Right))
-                {
-                    cameraZ -= 10.0f;
-                }
-
-                if (kbState.IsKeyDown(Keys.Q))
-                {
-                    cameraY += 0.2f;
-                }
-
-                if (kbState.IsKeyDown(Keys.E))
-                {
-                    cameraY -= 0.2f;
-                }
-            }
-            if (kbState.IsKeyDown(Keys.Escape))
-            {
-                if(isFullScreen)
-                {
-                    isFullScreen = false;
-                }
-                else
-                {
-                    isFullScreen = true;
-                }
-                graphics.IsFullScreen = isFullScreen;
-                graphics.ApplyChanges();
-            }
-
-            if (kbState.IsKeyDown(Keys.D1))
-            {
-                cameraX = 0.0f;
-                cameraY = 10.0f;
-                cameraZ = 0.0f;
-
-                //cameraX = planetArray[0].PlanetPosition.X + planetArray[0].PlanetScale[0] + 50.0f;
-                //cameraY = planetArray[0].PlanetPosition.X + planetArray[0].PlanetScale[0] + 50.0f;
-                //cameraZ = planetArray[0].PlanetPosition.X + planetArray[0].PlanetScale[0] + 50.0f;
-
                 selectedPlanet = 1;
             }
-            if (kbState.IsKeyDown(Keys.D2))
+            if (input.KeyboardState.IsKeyDown(Keys.D2))
             {
                 selectedPlanet = 2;
             }
-            if (kbState.IsKeyDown(Keys.D3))
+            if (input.KeyboardState.IsKeyDown(Keys.D3))
             {
                 selectedPlanet = 3;
             }
-            if (kbState.IsKeyDown(Keys.D4))
+            if (input.KeyboardState.IsKeyDown(Keys.D4))
             {
                 selectedPlanet = 4;
             }
-            if (kbState.IsKeyDown(Keys.D5))
+            if (input.KeyboardState.IsKeyDown(Keys.D5))
+            {
+                selectedPlanet = 5;
+            }
+            if (input.KeyboardState.IsKeyDown(Keys.D6))
             {
                 selectedPlanet = 6;
             }
-
-            if (kbState.IsKeyDown(Keys.D6))
-            {
-                selectedPlanet = 6;
-            }
-            if (kbState.IsKeyDown(Keys.D7))
+            if (input.KeyboardState.IsKeyDown(Keys.D7))
             {
                 selectedPlanet = 7;
             }
-            if (kbState.IsKeyDown(Keys.D8))
+            if (input.KeyboardState.IsKeyDown(Keys.D8))
             {
                 selectedPlanet = 8;
             }
 
             if (selectedPlanet > 0)
             {
-                camPos = planetArray[selectedPlanet - 1].PlanetPosition + new Vector3(planetArray[selectedPlanet - 1].PlanetPosition.X + cameraX, 
-                                                                                      planetArray[selectedPlanet - 1].PlanetPosition.Y+ cameraY, 
-                                                                                      planetArray[selectedPlanet - 1].PlanetPosition.Z + cameraZ);
-                camTar = planetArray[selectedPlanet - 1].PlanetPosition;
+                //camera.CamPos = planetArray[selectedPlanet - 1].PlanetPosition;
+                camera.CamPos = new Vector3((planetArray[selectedPlanet - 1].PlanetPosition.X)+100,
+                                            (planetArray[selectedPlanet - 1].PlanetPosition.Y)+1000,
+                                            planetArray[selectedPlanet - 1].PlanetPosition.Z);
+                camera.CamTar = planetArray[selectedPlanet - 1].PlanetPosition;
             }
-
-            InitCamera();
 
             base.Update(gameTime);
         }
@@ -404,6 +291,14 @@ namespace EarthMoon
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
+
+            view = camera.View;
+            projection = camera.Projection;
+
+            effect.World = Matrix.Identity;
+            effect.Projection = projection;
+            effect.View = view;
+
 
             // TODO: Add your drawing code here
             this.DrawStar(gameTime);
@@ -423,20 +318,20 @@ namespace EarthMoon
                 matrixStrack.Pop();
             }
             
-            //this.DrawEarth(gameTime);
-            //this.DrawMoon(2.0f, 0.0f);
-
-            //matrixStrack.Pop();
-            //matrixStrack.Pop();
             spriteBatch.Begin();
             float y = 0.0f;
-            foreach (Planet p in planetArray)
+            if (selectedPlanet > 0)
             {
-                spriteBatch.DrawString(font, p.PlanetName + "-X: " + p.PlanetPosition.X, new Vector2(0.0f, y += 20), Color.WhiteSmoke);
-                spriteBatch.DrawString(font, p.PlanetName + "-Y: " + p.PlanetPosition.Y, new Vector2(0.0f, y += 20), Color.WhiteSmoke);
-                spriteBatch.DrawString(font, p.PlanetName + "-Z: " + p.PlanetPosition.Z, new Vector2(0.0f, y += 20), Color.WhiteSmoke);
+                spriteBatch.DrawString(font, "Selected planet: " + planetArray[selectedPlanet - 1].PlanetName, new Vector2(0.0f, y += 20), Color.WhiteSmoke);
                 y += 20;
             }
+            foreach (Planet p in planetArray)
+            {
+                spriteBatch.DrawString(font, p.PlanetName + " pos:" + p.PlanetPosition, new Vector2(0.0f, y += 20), Color.WhiteSmoke);
+                y += 20;
+            }
+            spriteBatch.DrawString(font, "Cam pos: " + camera.CamPos, new Vector2(0.0f, y += 20), Color.WhiteSmoke);
+            spriteBatch.DrawString(font, "Cam tar: " + camera.CamTar, new Vector2(0.0f, y += 20), Color.WhiteSmoke);
             spriteBatch.End();
             base.Draw(gameTime);
         }
@@ -445,7 +340,7 @@ namespace EarthMoon
         {
             Matrix matScale, matRotateY, matTrans;
 
-            matScale = Matrix.CreateScale(1.0f);
+            matScale = Matrix.CreateScale(5.0f);
             matTrans = Matrix.CreateTranslation(0.0f, 0.0f, 0.0f);
             
 
@@ -457,7 +352,7 @@ namespace EarthMoon
             matrixStrack.Push(world);
 
             effect.World = world;
-            mStar.Draw(world, view, projection);
+            mStar.Draw(world, camera.View, camera.Projection);
         }
 
         private void DrawPlanet(GameTime gameTime, Planet planet)
@@ -485,7 +380,7 @@ namespace EarthMoon
 
             planet.PlanetPosition = Matrix.Invert(world).Translation;
 
-            mStar.Draw(world, view, projection);
+            mStar.Draw(world, camera.View, camera.Projection);
 
         }
 
@@ -511,78 +406,7 @@ namespace EarthMoon
             matrixStrack.Push(world);
 
             effect.World = world;
-            mStar.Draw(world, view, projection);
+            mStar.Draw(world, camera.View, camera.Projection);
         }
-
-        /*
-        private void DrawEarth(GameTime gameTime)
-        {
-
-            Matrix matScale, matRotateY, matTrans;
-            //Skaleringsmatrise:
-            matScale = Matrix.CreateScale(0.5f);
-            //Translasjonsmatrise:
-            matTrans = Matrix.CreateTranslation(0.0f, 0.0f, -3.0f);
-            //Rotasjonsmatrise (y-akse):
-            matRotateY = Matrix.CreateRotationY(earthRotY);
-            earthRotY += (float)gameTime.ElapsedGameTime.Milliseconds / 5000.0f;
-            earthRotY = earthRotY % (float)(2 * Math.PI);
-            //Kumulativ world-matrise;
-            world = matScale * matRotateY * matTrans;
-            //Legger på matrisestack:
-            matrixStrack.Push(world);
-            //Setter jordas world-matrise:
-            effect.World = world;
-            //Tegner jorda:
-            mEarth.Draw(world, view, projection);
-        }
-
-        private void DrawMoon(GameTime gameTime)
-        {
-            Matrix matScale, matRotateY, matTrans;
-            //Skaleringsmatrise:
-            matScale = Matrix.CreateScale(0.5f);
-            //Translasjonsmatrise:
-            matTrans = Matrix.CreateTranslation(0.0f, 0.0f, -3.0f);
-            //Rotasjonsmatrise (y-akse):
-            matRotateY = Matrix.CreateRotationY(earthRotY);
-            earthRotY += (float)TargetElapsedTime.Milliseconds / 5000.0f;
-            earthRotY = earthRotY % (float)(2 * Math.PI);
-            //Kumulativ world-matrise;
-            world = matScale * matRotateY * matTrans;
-            //Legger på matrisestack:
-            matrixStrack.Push(world);
-            //Setter jordas world-matrise:
-            effect.World = world;
-            //Tegner jorda:
-            mMoon.Draw(world, view, projection);
-        }
-        private void DrawMoon(float orbitX, float orbitY)
-        {
-            //Leser toppen av matrisestacken (world-matrisa for jorda):
-            Matrix _world = matrixStrack.Peek();
-            Matrix matRotateY, matScale, matOrbTranslation, matOrbRotation;
-            //Skaleringsmatrisa:
-            matScale = Matrix.CreateScale(0.5f);
-            //Rotasjonsmatrisa (om y):
-            matRotateY = Matrix.CreateRotationY(moonRotY);
-            moonRotY += 0.2f / 400.0f;
-            moonRotY = moonRotY % (float)(2 * Math.PI);
-            //Månen skal gå i bane - Orbit - en translasjon etterfulgt av en rotasjon:
-            matOrbTranslation = Matrix.CreateTranslation(orbitX, orbitY, 0.0f);
-            moonOrbitY += (48.5f/60) * (float)TargetElapsedTime.Milliseconds / 50.0f;
-            moonOrbitY = moonOrbitY % (float)(2 * Math.PI);
-            matOrbRotation = Matrix.CreateRotationY(moonOrbitY);
-            //Kumulativ world-transformasjonen - inkludert jordas world-transformasjon:
-            world = matScale * matRotateY * matOrbTranslation * matOrbRotation * _world;
-            //Legger på stack:
-            matrixStrack.Push(world);
-            //Setter world-matrise for månen:
-            effect.World = world;
-            //Tegner månen:
-            mMoon.Draw(world, view, projection);
-        }
-        */
-
     }
 }
