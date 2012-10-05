@@ -232,16 +232,18 @@ namespace EarthMoon
             planetTextures[8] = Content.Load<Texture2D>("textures/Moon");
             planetTextures[9] = Content.Load<Texture2D>("textures/Sun");
 
-            int i = 0;
+            (mStar.Meshes[0].Effects[0] as BasicEffect).Texture = planetTextures[9];
+            (mStar.Meshes[0].Effects[0] as BasicEffect).TextureEnabled = true;
 
-            foreach (Planet p in planetArray)
+
+
+            for (int i = 0; i < 8; i++ )
             {
-                p.PlanetModel = Content.Load<Model>("sphere");
-                (p.PlanetModel.Meshes[0].Effects[0] as BasicEffect).EnableDefaultLighting();
+                planetArray[i].PlanetModel = Content.Load<Model>("sphere");
+                (planetArray[i].PlanetModel.Meshes[0].Effects[0] as BasicEffect).EnableDefaultLighting();
 
-                (p.PlanetModel.Meshes[0].Effects[0] as BasicEffect).Texture = planetTextures[i];
-                (p.PlanetModel.Meshes[0].Effects[0] as BasicEffect).TextureEnabled = true;
-                i++;
+                (planetArray[i].PlanetModel.Meshes[0].Effects[0] as BasicEffect).Texture = planetTextures[i];
+                (planetArray[i].PlanetModel.Meshes[0].Effects[0] as BasicEffect).TextureEnabled = true;
             }
         }
 
