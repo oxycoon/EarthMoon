@@ -216,23 +216,13 @@ namespace EarthMoon
             font = Content.Load<SpriteFont>("font");
 
             // TODO: use this.Content to load your game content here
-            loadPlanets();
-
-            mStar = Content.Load<Model>("sun");           
-            (mStar.Meshes[0].Effects[0] as BasicEffect).Texture = planetTextures[9];
-            (mStar.Meshes[0].Effects[0] as BasicEffect).TextureEnabled = true;
-
-            mMoon = Content.Load<Model>("moon");
-            (mMoon.Meshes[0].Effects[0] as BasicEffect).Texture = planetTextures[8];
-            (mMoon.Meshes[0].Effects[0] as BasicEffect).TextureEnabled = true;
-
-            
+            loadSpaceObjects();          
         }
 
         /// <summary>
-        /// Loads all planet models and textures.
+        /// Loads all space object models and textures.
         /// </summary>
-        private void loadPlanets()
+        private void loadSpaceObjects()
         {
             planetTextures[0] = Content.Load<Texture2D>("textures/mercury");
             planetTextures[1] = Content.Load<Texture2D>("textures/venus");
@@ -259,7 +249,16 @@ namespace EarthMoon
                 (planetArray[i].PlanetModel.Meshes[0].Effects[0] as BasicEffect).EnableDefaultLighting();
                 (planetArray[i].PlanetModel.Meshes[0].Effects[0] as BasicEffect).Texture = planetTextures[i];
                 (planetArray[i].PlanetModel.Meshes[0].Effects[0] as BasicEffect).TextureEnabled = true;
-            }        
+            }
+
+            mStar = Content.Load<Model>("models/sun");
+            (mStar.Meshes[0].Effects[0] as BasicEffect).Texture = planetTextures[9];
+            (mStar.Meshes[0].Effects[0] as BasicEffect).TextureEnabled = true;
+
+            mMoon = Content.Load<Model>("models/moon");
+            (mMoon.Meshes[0].Effects[0] as BasicEffect).Texture = planetTextures[8];
+            (mMoon.Meshes[0].Effects[0] as BasicEffect).TextureEnabled = true;
+
         }
 
         /// <summary>
@@ -346,8 +345,18 @@ namespace EarthMoon
             effect.View = view;
 
 
+
             // TODO: Add your drawing code here
+            effect.LightingEnabled = true;
+            effect.DirectionalLight0.Enabled = true;
+            effect.DirectionalLight0.DiffuseColor = Color.Yellow.ToVector3();
+            effect.DirectionalLight0.Direction = Vector3.Normalize(new Vector3(-1.0f, -1.5f, 0.0f));
+            effect.EmissiveColor = Color.Red.ToVector3();
+
             this.DrawStar(gameTime);
+
+            effect.DirectionalLight0.Enabled = false;
+
             foreach (Planet p in planetArray)
             {
                 this.DrawPlanet(gameTime, p);
@@ -388,7 +397,6 @@ namespace EarthMoon
 
             matScale = Matrix.CreateScale(5.0f);
             matTrans = Matrix.CreateTranslation(0.0f, 0.0f, 0.0f);
-
 
             matRotateY = Matrix.CreateRotationY(sunRotY);
             sunRotY += (float)gameTime.ElapsedGameTime.Milliseconds / 5000.0f;
