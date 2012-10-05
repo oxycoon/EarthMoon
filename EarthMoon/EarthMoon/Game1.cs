@@ -22,9 +22,9 @@ namespace EarthMoon
         private GraphicsDeviceManager graphics;
         //private ContentManager content;
         private GraphicsDevice device;
-        private CameraComponent camera;
+        private Camera camera;
 
-        private InputComponent input;
+        private InputHandler input;
 
         private SpriteFont font;
 
@@ -35,7 +35,7 @@ namespace EarthMoon
         //private Vector3 camPos = new Vector3(700.0f, 10.0f, 0.0f);
         //private Vector3 camTar = Vector3.Zero;
         //private Vector3 camUpVec = Vector3.Up;
-        private float cameraX, cameraY, cameraZ;
+        //private float cameraX, cameraY, cameraZ;
 
         private SpriteBatch spriteBatch;
 
@@ -43,7 +43,7 @@ namespace EarthMoon
 
         private float earthRotY = 0.0f;
         private float moonRotY = 0.0f;
-        private float moonOrbitY = 0.0f;
+        private float moonorbity = 0.0f;
         private float sunRotY = 0.0f;
 
         private Model mEarth;
@@ -56,23 +56,23 @@ namespace EarthMoon
         // Planets
         private Planet[] planetArray = new Planet[8];
 
-        //private float[] scaleMercury = { 690000.7f, 690000.7f };        //radius for mercury 0 is x, z and 1 is y
-        //private float[] scaleVenus = { 690000.7f, 690000.7f };            //radius for venus
-        //private float[] scaleTerra = { 690000.7f, 690000.7f };            //radius for earth
-        //private float[] scaleMars = { 690000.7f, 690000.7f };              //radius for mars
-        //private float[] scaleJupiter = { 690000.7f, 690000.7f };      //radius for jupiter
-        //private float[] scaleSaturn = { 690000.7f, 690000.7f };        //radius for saturn
-        //private float[] scaleUranus = { 690000.7f, 690000.7f };        //radius for uranus
-        //private float[] scaleNeptune = { 690000.7f, 690000.7f };      //radius for neptune
+        private float[] scaleMercury =  { 690000.7f, 690000.7f };        //radius for mercury 0 is x, z and 1 is y
+        private float[] scaleVenus =    { 690000.7f, 690000.7f };            //radius for venus
+        private float[] scaleTerra =    { 690000.7f, 690000.7f };            //radius for earth
+        private float[] scaleMars =     { 690000.7f, 690000.7f };              //radius for mars
+        private float[] scaleJupiter =  { 690000.7f, 690000.7f };      //radius for jupiter
+        private float[] scaleSaturn =   { 690000.7f, 690000.7f };        //radius for saturn
+        private float[] scaleUranus =   { 690000.7f, 690000.7f };        //radius for uranus
+        private float[] scaleNeptune =  { 690000.7f, 690000.7f };      //radius for neptune
 
-        private float[] scaleMercury = { 2439.7f, 2439.7f };        //radius for mercury 0 is x, z and 1 is y
-        private float[] scaleVenus = { 6051.8f, 6051.8f };            //radius for venus
-        private float[] scaleTerra = { 6378.1f, 6356.8f };            //radius for earth
-        private float[] scaleMars = { 3396.2f, 3376.2f };              //radius for mars
-        private float[] scaleJupiter = { 71492.0f, 66854.0f };      //radius for jupiter
-        private float[] scaleSaturn = { 60268.0f, 54364.0f };        //radius for saturn
-        private float[] scaleUranus = { 25559.0f, 24973.0f };        //radius for uranus
-        private float[] scaleNeptune = { 24764.0f, 24341.0f };      //radius for neptune
+        //private float[] scaleMercury = { 2439.7f, 2439.7f };        //radius for mercury 0 is x, z and 1 is y
+        //private float[] scaleVenus = { 6051.8f, 6051.8f };            //radius for venus
+        //private float[] scaleTerra = { 6378.1f, 6356.8f };            //radius for earth
+        //private float[] scaleMars = { 3396.2f, 3376.2f };              //radius for mars
+        //private float[] scaleJupiter = { 71492.0f, 66854.0f };      //radius for jupiter
+        //private float[] scaleSaturn = { 60268.0f, 54364.0f };        //radius for saturn
+        //private float[] scaleUranus = { 25559.0f, 24973.0f };        //radius for uranus
+        //private float[] scaleNeptune = { 24764.0f, 24341.0f };      //radius for neptune
 
         private float dc_mercury = 6.98f * (float)Math.Pow(10, 7), df_mercury = 4.60f * (float)Math.Pow(10, 7);     //distance from sol at closest and furthest
         private float dc_venus = 1.075f * (float)Math.Pow(10, 8), df_venus = 1.098f * (float)Math.Pow(10, 8);       //distance from sol at closest and furthest
@@ -109,10 +109,10 @@ namespace EarthMoon
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            input = new InputComponent(this);
+            input = new InputHandler(this);
             this.Components.Add(input);
 
-            camera = new CameraComponent(this);
+            camera = new Camera(this);
             this.Components.Add(camera);
 
             /*
@@ -239,7 +239,6 @@ namespace EarthMoon
                 p.PlanetModel = Content.Load<Model>("sphere");
                 (p.PlanetModel.Meshes[0].Effects[0] as BasicEffect).EnableDefaultLighting();
 
-
                 (p.PlanetModel.Meshes[0].Effects[0] as BasicEffect).Texture = planetTextures[i];
                 (p.PlanetModel.Meshes[0].Effects[0] as BasicEffect).TextureEnabled = true;
                 i++;
@@ -269,35 +268,35 @@ namespace EarthMoon
             // TODO: Add your update logic here
 
            
-            if (input.KbState.IsKeyDown(Keys.D1))
+            if (input.KeyboardState.IsKeyDown(Keys.D1))
             {
                 selectedPlanet = 1;
             }
-            if (input.KbState.IsKeyDown(Keys.D2))
+            if (input.KeyboardState.IsKeyDown(Keys.D2))
             {
                 selectedPlanet = 2;
             }
-            if (input.KbState.IsKeyDown(Keys.D3))
+            if (input.KeyboardState.IsKeyDown(Keys.D3))
             {
                 selectedPlanet = 3;
             }
-            if (input.KbState.IsKeyDown(Keys.D4))
+            if (input.KeyboardState.IsKeyDown(Keys.D4))
             {
                 selectedPlanet = 4;
             }
-            if (input.KbState.IsKeyDown(Keys.D5))
+            if (input.KeyboardState.IsKeyDown(Keys.D5))
             {
                 selectedPlanet = 5;
             }
-            if (input.KbState.IsKeyDown(Keys.D6))
+            if (input.KeyboardState.IsKeyDown(Keys.D6))
             {
                 selectedPlanet = 6;
             }
-            if (input.KbState.IsKeyDown(Keys.D7))
+            if (input.KeyboardState.IsKeyDown(Keys.D7))
             {
                 selectedPlanet = 7;
             }
-            if (input.KbState.IsKeyDown(Keys.D8))
+            if (input.KeyboardState.IsKeyDown(Keys.D8))
             {
                 selectedPlanet = 8;
             }
