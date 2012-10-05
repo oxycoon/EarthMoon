@@ -126,46 +126,46 @@ namespace EarthMoon
             Neptun =    new Planet("Neptun", temp, 0.5f, new Vector3(40.0f, 0.0f, 0.0f), 0.4f, 4.4f);
             */
             //Name, Model, Scale, DistanceFromSun, RS, OS, moonCount
-            planetArray[0] = new Planet("Mercury", null, scaleMercury, new Vector3(50.0f, 0.0f, 0.0f), 0.0001f, 0.0001f, 0);
-            planetArray[1] = new Planet("Venus", null, scaleVenus, new Vector3(75.0f, 0.0f, 0.0f), 0.4f, 0.6f, 0);
+            planetArray[0] = new Planet("Mercury", scaleMercury, new Vector3(50.0f, 0.0f, 0.0f), 0.0001f, 0.0001f, 0);
+            planetArray[1] = new Planet("Venus", scaleVenus, new Vector3(75.0f, 0.0f, 0.0f), 0.4f, 0.6f, 0);
 
-            planetArray[2] = new Planet("Earth", temp, scaleTerra, new Vector3(100.0f, 0.0f, 0.0f), 0.06f, 0.01f, 1);
-            planetArray[2].MoonArray[0] = new Moon("The Moon", temp, 0.5f, new Vector3(2.0f, 0.0f, 0.0f), 0.1f, 0.1f);
+            planetArray[2] = new Planet("Earth",  scaleTerra, new Vector3(100.0f, 0.0f, 0.0f), 0.06f, 0.01f, 1);
+            planetArray[2].MoonArray[0] = new Moon("The Moon",  0.5f, new Vector3(2.0f, 0.0f, 0.0f), 0.1f, 0.1f);
 
-            planetArray[3] = new Planet("Mars", temp, scaleMars, new Vector3(125.0f, 0.0f, 0.0f), 0.4f, 0.05f, 2);
-            planetArray[3].MoonArray[0] = new Moon("Deimos", temp, 0.5f, new Vector3(2.0f, 0.0f, 0.0f), 0.1f, 2.0f);
-            planetArray[3].MoonArray[1] = new Moon("Phobos", temp, 0.5f, new Vector3(4.0f, 0.0f, 0.0f), 0.1f, 0.1f);
+            planetArray[3] = new Planet("Mars",  scaleMars, new Vector3(125.0f, 0.0f, 0.0f), 0.4f, 0.05f, 2);
+            planetArray[3].MoonArray[0] = new Moon("Deimos",  0.5f, new Vector3(2.0f, 0.0f, 0.0f), 0.1f, 2.0f);
+            planetArray[3].MoonArray[1] = new Moon("Phobos",  0.5f, new Vector3(4.0f, 0.0f, 0.0f), 0.1f, 0.1f);
 
-            planetArray[4] = new Planet("Jupiter", temp, scaleJupiter, new Vector3(150.0f, 0.0f, 0.0f), 0.4f, 0.04f, 4);
-            planetArray[4].MoonArray[0] = new Moon("Lo", temp, 0.5f, new Vector3(1.0f, 0.0f, 0.0f), 0.1f, 1.0f);
-            planetArray[4].MoonArray[1] = new Moon("Europa", temp, 0.5f, new Vector3(3.0f, 0.0f, 0.0f), 0.1f, 0.2f);
-            planetArray[4].MoonArray[2] = new Moon("Genymede", temp, 0.5f, new Vector3(5.0f, 0.0f, 0.0f), 0.1f, 0.7f);
-            planetArray[4].MoonArray[3] = new Moon("Callisto", temp, 0.5f, new Vector3(7.0f, 0.0f, 0.0f), 0.1f, 0.1f);
+            planetArray[4] = new Planet("Jupiter",  scaleJupiter, new Vector3(150.0f, 0.0f, 0.0f), 0.4f, 0.04f, 4);
+            planetArray[4].MoonArray[0] = new Moon("Lo",  0.5f, new Vector3(1.0f, 0.0f, 0.0f), 0.1f, 1.0f);
+            planetArray[4].MoonArray[1] = new Moon("Europa",  0.5f, new Vector3(3.0f, 0.0f, 0.0f), 0.1f, 0.2f);
+            planetArray[4].MoonArray[2] = new Moon("Genymede",  0.5f, new Vector3(5.0f, 0.0f, 0.0f), 0.1f, 0.7f);
+            planetArray[4].MoonArray[3] = new Moon("Callisto",  0.5f, new Vector3(7.0f, 0.0f, 0.0f), 0.1f, 0.1f);
 
-            planetArray[5] = new Planet("Saturn", temp, scaleSaturn, new Vector3(175.0f, 0.0f, 0.0f), 0.4f, 0.03f, 9);
-            planetArray[5].MoonArray[0] = new Moon("Mimas", temp, 0.5f, new Vector3(1.0f, 0.0f, 0.0f), 0.1f, 0.1f);
-            planetArray[5].MoonArray[1] = new Moon("Enceladus", temp, 0.5f, new Vector3(2.0f, 0.0f, 0.0f), 0.1f, 0.2f);
-            planetArray[5].MoonArray[2] = new Moon("Tethys", temp, 0.5f, new Vector3(3.0f, 0.0f, 0.0f), 0.1f, 0.3f);
-            planetArray[5].MoonArray[3] = new Moon("Dione", temp, 0.5f, new Vector3(4.0f, 0.0f, 0.0f), 0.1f, 0.4f);
-            planetArray[5].MoonArray[4] = new Moon("Rhea", temp, 0.5f, new Vector3(5.0f, 0.0f, 0.0f), 0.1f, 0.5f);
-            planetArray[5].MoonArray[5] = new Moon("Titan", temp, 0.5f, new Vector3(6.0f, 0.0f, 0.0f), 0.1f, 0.6f);
-            planetArray[5].MoonArray[6] = new Moon("Hyperion", temp, 0.5f, new Vector3(7.0f, 0.0f, 0.0f), 0.1f, 0.7f);
-            planetArray[5].MoonArray[7] = new Moon("Lapetus", temp, 0.5f, new Vector3(8.0f, 0.0f, 0.0f), 0.1f, 0.8f);
-            planetArray[5].MoonArray[8] = new Moon("Phoebe", temp, 0.5f, new Vector3(9.0f, 0.0f, 0.0f), 0.1f, 0.9f);
+            planetArray[5] = new Planet("Saturn",  scaleSaturn, new Vector3(175.0f, 0.0f, 0.0f), 0.4f, 0.03f, 9);
+            planetArray[5].MoonArray[0] = new Moon("Mimas",  0.5f, new Vector3(1.0f, 0.0f, 0.0f), 0.1f, 0.1f);
+            planetArray[5].MoonArray[1] = new Moon("Enceladus",  0.5f, new Vector3(2.0f, 0.0f, 0.0f), 0.1f, 0.2f);
+            planetArray[5].MoonArray[2] = new Moon("Tethys",  0.5f, new Vector3(3.0f, 0.0f, 0.0f), 0.1f, 0.3f);
+            planetArray[5].MoonArray[3] = new Moon("Dione",  0.5f, new Vector3(4.0f, 0.0f, 0.0f), 0.1f, 0.4f);
+            planetArray[5].MoonArray[4] = new Moon("Rhea",  0.5f, new Vector3(5.0f, 0.0f, 0.0f), 0.1f, 0.5f);
+            planetArray[5].MoonArray[5] = new Moon("Titan",  0.5f, new Vector3(6.0f, 0.0f, 0.0f), 0.1f, 0.6f);
+            planetArray[5].MoonArray[6] = new Moon("Hyperion",  0.5f, new Vector3(7.0f, 0.0f, 0.0f), 0.1f, 0.7f);
+            planetArray[5].MoonArray[7] = new Moon("Lapetus",  0.5f, new Vector3(8.0f, 0.0f, 0.0f), 0.1f, 0.8f);
+            planetArray[5].MoonArray[8] = new Moon("Phoebe",  0.5f, new Vector3(9.0f, 0.0f, 0.0f), 0.1f, 0.9f);
 
-            planetArray[6] = new Planet("Uranus", temp, scaleUranus, new Vector3(200.0f, 0.0f, 0.0f), 0.4f, 0.02f, 6);
-            planetArray[6].MoonArray[0] = new Moon("Puck", temp, 0.5f, new Vector3(1.0f, 0.0f, 0.0f), 0.1f, 0.2f);
-            planetArray[6].MoonArray[1] = new Moon("Miranda", temp, 0.5f, new Vector3(2.0f, 0.0f, 0.0f), 0.1f, 0.5f);
-            planetArray[6].MoonArray[2] = new Moon("Ariel", temp, 0.5f, new Vector3(3.0f, 0.0f, 0.0f), 0.1f, 0.3f);
-            planetArray[6].MoonArray[3] = new Moon("Umbriel", temp, 0.5f, new Vector3(4.0f, 0.0f, 0.0f), 0.1f, 0.6f);
-            planetArray[6].MoonArray[4] = new Moon("Titania", temp, 0.5f, new Vector3(5.0f, 0.0f, 0.0f), 0.1f, 0.1f);
-            planetArray[6].MoonArray[5] = new Moon("Oberon", temp, 0.5f, new Vector3(6.0f, 0.0f, 0.0f), 0.1f, 0.4f);
+            planetArray[6] = new Planet("Uranus",  scaleUranus, new Vector3(200.0f, 0.0f, 0.0f), 0.4f, 0.02f, 6);
+            planetArray[6].MoonArray[0] = new Moon("Puck",  0.5f, new Vector3(1.0f, 0.0f, 0.0f), 0.1f, 0.2f);
+            planetArray[6].MoonArray[1] = new Moon("Miranda",  0.5f, new Vector3(2.0f, 0.0f, 0.0f), 0.1f, 0.5f);
+            planetArray[6].MoonArray[2] = new Moon("Ariel",  0.5f, new Vector3(3.0f, 0.0f, 0.0f), 0.1f, 0.3f);
+            planetArray[6].MoonArray[3] = new Moon("Umbriel",  0.5f, new Vector3(4.0f, 0.0f, 0.0f), 0.1f, 0.6f);
+            planetArray[6].MoonArray[4] = new Moon("Titania",  0.5f, new Vector3(5.0f, 0.0f, 0.0f), 0.1f, 0.1f);
+            planetArray[6].MoonArray[5] = new Moon("Oberon",  0.5f, new Vector3(6.0f, 0.0f, 0.0f), 0.1f, 0.4f);
 
-            //planetArray[7] = new Planet("Neptune", temp, scaleNeptune, new Vector3(225.0f, 0.0f, 0.0f), 0.4f, 0.01f, 3);
-            planetArray[7] = new Planet("Neptune", temp, scaleNeptune, new Vector3(225.0f, 0.0f, 0.0f), 0.4f, 0.01f, 3);
-            planetArray[7].MoonArray[0] = new Moon("Proteus", temp, 0.5f, new Vector3(1.0f, 0.0f, 0.0f), 0.1f, 0.5f);
-            planetArray[7].MoonArray[1] = new Moon("Triton", temp, 0.5f, new Vector3(2.0f, 0.0f, 0.0f), 0.1f, 0.2f);
-            planetArray[7].MoonArray[2] = new Moon("Nereid", temp, 0.5f, new Vector3(3.0f, 0.0f, 0.0f), 0.1f, 1.0f);
+            //planetArray[7] = new Planet("Neptune",  scaleNeptune, new Vector3(225.0f, 0.0f, 0.0f), 0.4f, 0.01f, 3);
+            planetArray[7] = new Planet("Neptune",  scaleNeptune, new Vector3(225.0f, 0.0f, 0.0f), 0.4f, 0.01f, 3);
+            planetArray[7].MoonArray[0] = new Moon("Proteus",  0.5f, new Vector3(1.0f, 0.0f, 0.0f), 0.1f, 0.5f);
+            planetArray[7].MoonArray[1] = new Moon("Triton",  0.5f, new Vector3(2.0f, 0.0f, 0.0f), 0.1f, 0.2f);
+            planetArray[7].MoonArray[2] = new Moon("Nereid",  0.5f, new Vector3(3.0f, 0.0f, 0.0f), 0.1f, 1.0f);
 
             this.IsFixedTimeStep = true;
         }

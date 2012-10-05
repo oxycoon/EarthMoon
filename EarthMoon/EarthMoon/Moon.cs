@@ -25,10 +25,10 @@ namespace EarthMoon
 
         
 
-        public Moon(String name, Model model, float scale, Vector3 distance, float rotSpeed, float orbitSpeed)
+        public Moon(String name, float scale, Vector3 distance, float rotSpeed, float orbitSpeed)
         {
             this.moonName = name;
-            this.moonModel = model;
+            //this.moonModel = model;
             this.moonScale = scale;
             this.moonDistanceToSun = distance;
             this.moonRotSpeed = rotSpeed;
