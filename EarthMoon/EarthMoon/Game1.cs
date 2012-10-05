@@ -46,7 +46,7 @@ namespace EarthMoon
         private float moonOrbitY = 0.0f;
         private float sunRotY = 0.0f;
 
-        private Model mStar;
+        private Model mStar, mMoon;
         private Model temp;
 
         private Texture2D[] planetTextures = new Texture2D[10];
@@ -216,10 +216,24 @@ namespace EarthMoon
             font = Content.Load<SpriteFont>("font");
 
             // TODO: use this.Content to load your game content here
+            loadPlanets();
 
-            mStar = Content.Load<Model>("sphere");
-            (mStar.Meshes[0].Effects[0] as BasicEffect).EnableDefaultLighting();
+            mStar = Content.Load<Model>("sun");           
+            (mStar.Meshes[0].Effects[0] as BasicEffect).Texture = planetTextures[9];
+            (mStar.Meshes[0].Effects[0] as BasicEffect).TextureEnabled = true;
 
+            mMoon = Content.Load<Model>("moon");
+            (mMoon.Meshes[0].Effects[0] as BasicEffect).Texture = planetTextures[8];
+            (mMoon.Meshes[0].Effects[0] as BasicEffect).TextureEnabled = true;
+
+            
+        }
+
+        /// <summary>
+        /// Loads all planet models and textures.
+        /// </summary>
+        private void loadPlanets()
+        {
             planetTextures[0] = Content.Load<Texture2D>("textures/mercury");
             planetTextures[1] = Content.Load<Texture2D>("textures/venus");
             planetTextures[2] = Content.Load<Texture2D>("textures/earth");
@@ -231,19 +245,21 @@ namespace EarthMoon
             planetTextures[8] = Content.Load<Texture2D>("textures/Moon");
             planetTextures[9] = Content.Load<Texture2D>("textures/Sun");
 
-            //(mStar.Meshes[0].Effects[0] as BasicEffect).Texture = planetTextures[9];
-            //(mStar.Meshes[0].Effects[0] as BasicEffect).TextureEnabled = true;
+            planetArray[0].PlanetModel = Content.Load<Model>("mercury");
+            planetArray[1].PlanetModel = Content.Load<Model>("venus");
+            planetArray[2].PlanetModel = Content.Load<Model>("terra");
+            planetArray[3].PlanetModel = Content.Load<Model>("mars");
+            planetArray[4].PlanetModel = Content.Load<Model>("jupiter");
+            planetArray[5].PlanetModel = Content.Load<Model>("saturn");
+            planetArray[6].PlanetModel = Content.Load<Model>("uranus");
+            planetArray[7].PlanetModel = Content.Load<Model>("neptune");
 
-            
             for (int i = 0; i < 8; i++)
-            {                
-                planetArray[i].PlanetModel = Content.Load<Model>("sphere");
+            {
                 (planetArray[i].PlanetModel.Meshes[0].Effects[0] as BasicEffect).EnableDefaultLighting();
-
                 (planetArray[i].PlanetModel.Meshes[0].Effects[0] as BasicEffect).Texture = planetTextures[i];
-                //planetArray[i].PlanetTexture = planetTextures[i];
                 (planetArray[i].PlanetModel.Meshes[0].Effects[0] as BasicEffect).TextureEnabled = true;
-            }
+            }        
         }
 
         /// <summary>
@@ -409,7 +425,6 @@ namespace EarthMoon
             effect.World = world;
 
             planet.PlanetPosition = Matrix.Invert(world).Translation;
-
             
             //mStar.Draw(world, camera.View, camera.Projection);
             planet.PlanetModel.Draw(world, camera.View, camera.Projection);
@@ -438,7 +453,7 @@ namespace EarthMoon
             matrixStrack.Push(world);
 
             effect.World = world;
-            mStar.Draw(world, camera.View, camera.Projection);
+            mMoon.Draw(world, camera.View, camera.Projection);
         }
     }
 }
