@@ -13,6 +13,14 @@ namespace EarthMoon
 
         private String planetName;
         private Model planetModel;
+        private Texture2D planetTexture;
+
+        public Texture2D PlanetTexture
+        {
+            get { return planetTexture; }
+            set { planetTexture = value; }
+        }
+
         private Vector3 planetDistanceToSun;
 
         private Vector3 planetPosition;
@@ -27,10 +35,10 @@ namespace EarthMoon
         private float planetOrbitY = 0.0f;
 
 
-        public Planet(String name, float[] scale, Vector3 distance, float rotSpeed, float orbitSpeed, int moonArraySize)
+        public Planet(String name, Model model, float[] scale, Vector3 distance, float rotSpeed, float orbitSpeed, int moonArraySize)
         {
             this.planetName = name;
-            //this.planetModel = model;
+            this.planetModel = model;
             this.planetScale = scale;
             this.planetDistanceToSun = distance;
             this.planetPosition = distance;
