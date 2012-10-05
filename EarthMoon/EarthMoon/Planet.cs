@@ -13,6 +13,14 @@ namespace EarthMoon
 
         private String planetName;
         private Model planetModel;
+        private Texture2D planetTexture;
+
+        public Texture2D PlanetTexture
+        {
+            get { return planetTexture; }
+            set { planetTexture = value; }
+        }
+
         private Vector3 planetDistanceToSun;
 
         private Vector3 planetPosition;
