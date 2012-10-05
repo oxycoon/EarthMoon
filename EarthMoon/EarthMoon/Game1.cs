@@ -35,7 +35,7 @@ namespace EarthMoon
         //private Vector3 camPos = new Vector3(700.0f, 10.0f, 0.0f);
         //private Vector3 camTar = Vector3.Zero;
         //private Vector3 camUpVec = Vector3.Up;
-        private float cameraX, cameraY, cameraZ;
+        //private float cameraX, cameraY, cameraZ;
 
         private SpriteBatch spriteBatch;
 
@@ -245,14 +245,14 @@ namespace EarthMoon
             planetTextures[8] = Content.Load<Texture2D>("textures/Moon");
             planetTextures[9] = Content.Load<Texture2D>("textures/Sun");
 
-            planetArray[0].PlanetModel = Content.Load<Model>("mercury");
-            planetArray[1].PlanetModel = Content.Load<Model>("venus");
-            planetArray[2].PlanetModel = Content.Load<Model>("terra");
-            planetArray[3].PlanetModel = Content.Load<Model>("mars");
-            planetArray[4].PlanetModel = Content.Load<Model>("jupiter");
-            planetArray[5].PlanetModel = Content.Load<Model>("saturn");
-            planetArray[6].PlanetModel = Content.Load<Model>("uranus");
-            planetArray[7].PlanetModel = Content.Load<Model>("neptune");
+            planetArray[0].PlanetModel = Content.Load<Model>("models/mercury");
+            planetArray[1].PlanetModel = Content.Load<Model>("models/venus");
+            planetArray[2].PlanetModel = Content.Load<Model>("models/terra");
+            planetArray[3].PlanetModel = Content.Load<Model>("models/mars");
+            planetArray[4].PlanetModel = Content.Load<Model>("models/jupiter");
+            planetArray[5].PlanetModel = Content.Load<Model>("models/saturn");
+            planetArray[6].PlanetModel = Content.Load<Model>("models/uranus");
+            planetArray[7].PlanetModel = Content.Load<Model>("models/neptune");
 
             for (int i = 0; i < 8; i++)
             {

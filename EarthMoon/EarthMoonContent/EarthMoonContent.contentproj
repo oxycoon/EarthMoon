@@ -114,70 +114,70 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="sun.FBX">
+    <Compile Include="models\sun.FBX">
       <Name>sun</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="moon.FBX">
+    <Compile Include="models\moon.FBX">
       <Name>moon</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="mercury.FBX">
+    <Compile Include="models\mercury.FBX">
       <Name>mercury</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="neptune.FBX">
+    <Compile Include="models\neptune.FBX">
       <Name>neptune</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="saturn.FBX">
+    <Compile Include="models\saturn.FBX">
       <Name>saturn</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="jupiter.FBX">
+    <Compile Include="models\jupiter.FBX">
       <Name>jupiter</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="mars.FBX">
+    <Compile Include="models\mars.FBX">
       <Name>mars</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="terra.FBX">
+    <Compile Include="models\terra.FBX">
       <Name>terra</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="venus.FBX">
+    <Compile Include="models\venus.FBX">
       <Name>venus</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="uranus.FBX">
+    <Compile Include="models\uranus.FBX">
       <Name>uranus</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
