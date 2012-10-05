@@ -107,8 +107,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CameraComponent.cs" />
-    <Compile Include="InputComponent.cs" />
+    <Compile Include="Camera.cs" />
+    <Compile Include="InputHandler.cs" />
     <Compile Include="Moon.cs" />
     <Compile Include="Planet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
