@@ -20,7 +20,7 @@ namespace EarthMoon
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
-    public class inputComponent : Microsoft.Xna.Framework.GameComponent, IInputHandler
+    public class InputComponent : Microsoft.Xna.Framework.GameComponent, IInputHandler
     {
         private KeyboardState kbState;
 
@@ -29,7 +29,7 @@ namespace EarthMoon
             get { return (kbState); }
         }
 
-        public inputComponent(Game game)
+        public InputComponent(Game game)
             : base(game)
         {
             // TODO: Construct any child components here

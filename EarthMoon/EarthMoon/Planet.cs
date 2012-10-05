@@ -52,6 +52,12 @@ namespace EarthMoon
             set { planetModel = value; }
         }
 
+        public Texture2D PlanetTexture
+        {
+            get { return planetTexture; }
+            set { planetTexture = value; }
+        }
+
         public Vector3 PlanetDistanceToSun
         {
             get { return planetDistanceToSun; }

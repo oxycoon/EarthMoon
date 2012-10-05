@@ -15,7 +15,7 @@ namespace EarthMoon
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
-    public class cameraComponent : Microsoft.Xna.Framework.GameComponent
+    public class CameraComponent : Microsoft.Xna.Framework.GameComponent
     {
         private IInputHandler input;
         private GraphicsDeviceManager graphics;
@@ -25,13 +25,14 @@ namespace EarthMoon
 
         private Vector3 camPos = new Vector3(0.0f, 0.0f, 3.0f);
         private Vector3 camTar = Vector3.Zero;
+
         private Vector3 camUpVec = Vector3.Up;
 
         private Vector3 camRef = new Vector3(0.0f, 0.0f, -0.0f);
 
         private float camYaw = 0.0f;
 
-        private const float spinRate = 40.0f;
+        private const float spinRate = 10.0f;
 
         public Matrix View
         {
@@ -45,7 +46,23 @@ namespace EarthMoon
             set { projection = value; }
         }
 
-        public cameraComponent(Game game)
+        public Vector3 CamPos
+        {
+            get { return camPos; }
+            set 
+            { 
+                camPos = value;
+                camRef = ((-1.0f) * camPos);
+                camRef.Normalize();
+            }
+        }
+        public Vector3 CamTar
+        {
+            get { return camTar; }
+            set { camTar = value; }
+        }
+
+        public CameraComponent(Game game)
             : base(game)
         {
             // TODO: Construct any child components here
@@ -63,6 +80,18 @@ namespace EarthMoon
             // TODO: Add your initialization code here
 
             base.Initialize();
+            initCam();
+        }
+
+        private void initCam()
+        {
+            float aspectRatio = (float)graphics.GraphicsDevice.Viewport.Width / (float)graphics.GraphicsDevice.Viewport.Height;
+
+            camRef = ((-1.0f) * camPos);
+            camRef.Normalize();
+
+            Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, aspectRatio, 1.0f, 1000.0f, out projection);
+            Matrix.CreateLookAt(ref camPos, ref camTar, ref camUpVec, out view);
         }
 
         /// <summary>
@@ -124,8 +153,6 @@ namespace EarthMoon
 
             Vector3 transformedRef;
             Vector3.Transform(ref camPos, ref rotMatrix, out transformedRef);
-
-
 
             base.Update(gameTime);
         }

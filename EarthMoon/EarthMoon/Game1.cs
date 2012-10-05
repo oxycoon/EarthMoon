@@ -22,16 +22,15 @@ namespace EarthMoon
         private GraphicsDeviceManager graphics;
         //private ContentManager content;
         private GraphicsDevice device;
-        private Camera camera;
+        private CameraComponent camera;
 
-        private InputHandler input;
+        private InputComponent input;
 
         private SpriteFont font;
 
         private BasicEffect effect;
 
         private Matrix world, view, projection;
-
 
         //private Vector3 camPos = new Vector3(700.0f, 10.0f, 0.0f);
         //private Vector3 camTar = Vector3.Zero;
@@ -52,17 +51,28 @@ namespace EarthMoon
         private Model mStar;
         private Model temp;
 
+        private Texture2D[] planetTextures = new Texture2D[10];
+
         // Planets
         private Planet[] planetArray = new Planet[8];
 
-        private float[] scaleMercury = { 690000.7f, 690000.7f };        //radius for mercury 0 is x, z and 1 is y
-        private float[] scaleVenus = { 690000.7f, 690000.7f };            //radius for venus
-        private float[] scaleTerra = { 690000.7f, 690000.7f };            //radius for earth
-        private float[] scaleMars = { 690000.7f, 690000.7f };              //radius for mars
-        private float[] scaleJupiter = { 690000.7f, 690000.7f };      //radius for jupiter
-        private float[] scaleSaturn = { 690000.7f, 690000.7f };        //radius for saturn
-        private float[] scaleUranus = { 690000.7f, 690000.7f };        //radius for uranus
-        private float[] scaleNeptune = { 690000.7f, 690000.7f };      //radius for neptune
+        //private float[] scaleMercury = { 690000.7f, 690000.7f };        //radius for mercury 0 is x, z and 1 is y
+        //private float[] scaleVenus = { 690000.7f, 690000.7f };            //radius for venus
+        //private float[] scaleTerra = { 690000.7f, 690000.7f };            //radius for earth
+        //private float[] scaleMars = { 690000.7f, 690000.7f };              //radius for mars
+        //private float[] scaleJupiter = { 690000.7f, 690000.7f };      //radius for jupiter
+        //private float[] scaleSaturn = { 690000.7f, 690000.7f };        //radius for saturn
+        //private float[] scaleUranus = { 690000.7f, 690000.7f };        //radius for uranus
+        //private float[] scaleNeptune = { 690000.7f, 690000.7f };      //radius for neptune
+
+        private float[] scaleMercury = { 2439.7f, 2439.7f };        //radius for mercury 0 is x, z and 1 is y
+        private float[] scaleVenus = { 6051.8f, 6051.8f };            //radius for venus
+        private float[] scaleTerra = { 6378.1f, 6356.8f };            //radius for earth
+        private float[] scaleMars = { 3396.2f, 3376.2f };              //radius for mars
+        private float[] scaleJupiter = { 71492.0f, 66854.0f };      //radius for jupiter
+        private float[] scaleSaturn = { 60268.0f, 54364.0f };        //radius for saturn
+        private float[] scaleUranus = { 25559.0f, 24973.0f };        //radius for uranus
+        private float[] scaleNeptune = { 24764.0f, 24341.0f };      //radius for neptune
 
         private float dc_mercury = 6.98f * (float)Math.Pow(10, 7), df_mercury = 4.60f * (float)Math.Pow(10, 7);     //distance from sol at closest and furthest
         private float dc_venus = 1.075f * (float)Math.Pow(10, 8), df_venus = 1.098f * (float)Math.Pow(10, 8);       //distance from sol at closest and furthest
@@ -99,10 +109,10 @@ namespace EarthMoon
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            input = new InputHandler(this);
+            input = new InputComponent(this);
             this.Components.Add(input);
 
-            camera = new Camera(this);
+            camera = new CameraComponent(this);
             this.Components.Add(camera);
 
             /*
@@ -116,8 +126,8 @@ namespace EarthMoon
             Neptun =    new Planet("Neptun", temp, 0.5f, new Vector3(40.0f, 0.0f, 0.0f), 0.4f, 4.4f);
             */
             //Name, Model, Scale, DistanceFromSun, RS, OS, moonCount
-            planetArray[0] = new Planet("Mercury", temp, scaleMercury, new Vector3(50.0f, 0.0f, 0.0f), 0.0001f, 0.0001f, 0);
-            planetArray[1] = new Planet("Venus", temp, scaleVenus, new Vector3(75.0f, 0.0f, 0.0f), 0.4f, 0.6f, 0);
+            planetArray[0] = new Planet("Mercury", null, scaleMercury, new Vector3(50.0f, 0.0f, 0.0f), 0.0001f, 0.0001f, 0);
+            planetArray[1] = new Planet("Venus", null, scaleVenus, new Vector3(75.0f, 0.0f, 0.0f), 0.4f, 0.6f, 0);
 
             planetArray[2] = new Planet("Earth", temp, scaleTerra, new Vector3(100.0f, 0.0f, 0.0f), 0.06f, 0.01f, 1);
             planetArray[2].MoonArray[0] = new Moon("The Moon", temp, 0.5f, new Vector3(2.0f, 0.0f, 0.0f), 0.1f, 0.1f);
@@ -143,7 +153,7 @@ namespace EarthMoon
             planetArray[5].MoonArray[7] = new Moon("Lapetus", temp, 0.5f, new Vector3(8.0f, 0.0f, 0.0f), 0.1f, 0.8f);
             planetArray[5].MoonArray[8] = new Moon("Phoebe", temp, 0.5f, new Vector3(9.0f, 0.0f, 0.0f), 0.1f, 0.9f);
 
-            planetArray[6] = new Planet("Uranus",   temp, scaleUranus, new Vector3(200.0f, 0.0f, 0.0f), 0.4f, 0.02f, 6);
+            planetArray[6] = new Planet("Uranus", temp, scaleUranus, new Vector3(200.0f, 0.0f, 0.0f), 0.4f, 0.02f, 6);
             planetArray[6].MoonArray[0] = new Moon("Puck", temp, 0.5f, new Vector3(1.0f, 0.0f, 0.0f), 0.1f, 0.2f);
             planetArray[6].MoonArray[1] = new Moon("Miranda", temp, 0.5f, new Vector3(2.0f, 0.0f, 0.0f), 0.1f, 0.5f);
             planetArray[6].MoonArray[2] = new Moon("Ariel", temp, 0.5f, new Vector3(3.0f, 0.0f, 0.0f), 0.1f, 0.3f);
@@ -151,7 +161,8 @@ namespace EarthMoon
             planetArray[6].MoonArray[4] = new Moon("Titania", temp, 0.5f, new Vector3(5.0f, 0.0f, 0.0f), 0.1f, 0.1f);
             planetArray[6].MoonArray[5] = new Moon("Oberon", temp, 0.5f, new Vector3(6.0f, 0.0f, 0.0f), 0.1f, 0.4f);
 
-            planetArray[7] = new Planet("Neptune",   temp,  scaleNeptune, new Vector3(225.0f, 0.0f, 0.0f), 0.4f, 0.01f, 3);
+            //planetArray[7] = new Planet("Neptune", temp, scaleNeptune, new Vector3(225.0f, 0.0f, 0.0f), 0.4f, 0.01f, 3);
+            planetArray[7] = new Planet("Neptune", temp, scaleNeptune, new Vector3(225.0f, 0.0f, 0.0f), 0.4f, 0.01f, 3);
             planetArray[7].MoonArray[0] = new Moon("Proteus", temp, 0.5f, new Vector3(1.0f, 0.0f, 0.0f), 0.1f, 0.5f);
             planetArray[7].MoonArray[1] = new Moon("Triton", temp, 0.5f, new Vector3(2.0f, 0.0f, 0.0f), 0.1f, 0.2f);
             planetArray[7].MoonArray[2] = new Moon("Nereid", temp, 0.5f, new Vector3(3.0f, 0.0f, 0.0f), 0.1f, 1.0f);
@@ -170,13 +181,13 @@ namespace EarthMoon
             // TODO: Add your initialization logic here
 
             base.Initialize();
-            InitDevice();
+            initDevice();
             this.IsMouseVisible = true;
             
             //InitCamera();
         }
 
-        private void InitDevice()
+        private void initDevice()
         {
             device = graphics.GraphicsDevice;
 
@@ -191,6 +202,7 @@ namespace EarthMoon
             //Initialiserer Effect-objektet:
             effect = new BasicEffect(graphics.GraphicsDevice);
             effect.VertexColorEnabled = false;
+            effect.TextureEnabled = true;
         }
 
 
@@ -209,10 +221,28 @@ namespace EarthMoon
             mStar = Content.Load<Model>("sphere");
             (mStar.Meshes[0].Effects[0] as BasicEffect).EnableDefaultLighting();
 
+            planetTextures[0] = Content.Load<Texture2D>("textures/mercury");
+            planetTextures[1] = Content.Load<Texture2D>("textures/venus");
+            planetTextures[2] = Content.Load<Texture2D>("textures/earth");
+            planetTextures[3] = Content.Load<Texture2D>("textures/mars");
+            planetTextures[4] = Content.Load<Texture2D>("textures/jupiter");
+            planetTextures[5] = Content.Load<Texture2D>("textures/saturn");
+            planetTextures[6] = Content.Load<Texture2D>("textures/Uranus");
+            planetTextures[7] = Content.Load<Texture2D>("textures/Neptune");
+            planetTextures[8] = Content.Load<Texture2D>("textures/Moon");
+            planetTextures[9] = Content.Load<Texture2D>("textures/Sun");
+
+            int i = 0;
+
             foreach(Planet p in planetArray)
             {
                 p.PlanetModel = Content.Load<Model>("sphere");
                 (p.PlanetModel.Meshes[0].Effects[0] as BasicEffect).EnableDefaultLighting();
+
+
+                (p.PlanetModel.Meshes[0].Effects[0] as BasicEffect).Texture = planetTextures[i];
+                (p.PlanetModel.Meshes[0].Effects[0] as BasicEffect).TextureEnabled = true;
+                i++;
             }
         }
 
@@ -239,35 +269,35 @@ namespace EarthMoon
             // TODO: Add your update logic here
 
            
-            if (input.KeyboardState.IsKeyDown(Keys.D1))
+            if (input.KbState.IsKeyDown(Keys.D1))
             {
                 selectedPlanet = 1;
             }
-            if (input.KeyboardState.IsKeyDown(Keys.D2))
+            if (input.KbState.IsKeyDown(Keys.D2))
             {
                 selectedPlanet = 2;
             }
-            if (input.KeyboardState.IsKeyDown(Keys.D3))
+            if (input.KbState.IsKeyDown(Keys.D3))
             {
                 selectedPlanet = 3;
             }
-            if (input.KeyboardState.IsKeyDown(Keys.D4))
+            if (input.KbState.IsKeyDown(Keys.D4))
             {
                 selectedPlanet = 4;
             }
-            if (input.KeyboardState.IsKeyDown(Keys.D5))
+            if (input.KbState.IsKeyDown(Keys.D5))
             {
                 selectedPlanet = 5;
             }
-            if (input.KeyboardState.IsKeyDown(Keys.D6))
+            if (input.KbState.IsKeyDown(Keys.D6))
             {
                 selectedPlanet = 6;
             }
-            if (input.KeyboardState.IsKeyDown(Keys.D7))
+            if (input.KbState.IsKeyDown(Keys.D7))
             {
                 selectedPlanet = 7;
             }
-            if (input.KeyboardState.IsKeyDown(Keys.D8))
+            if (input.KbState.IsKeyDown(Keys.D8))
             {
                 selectedPlanet = 8;
             }
@@ -407,6 +437,23 @@ namespace EarthMoon
 
             effect.World = world;
             mStar.Draw(world, camera.View, camera.Projection);
+        }
+
+        private void movePlanet(Planet p)
+        { 
+            /*  xv = r * cos(v) = a * ( cos(E) - e )
+                yv = r * sin(v) = a * ( sqrt(1.0 - e*e) * sin(E) )
+
+                v = atan2( yv, xv )
+                r = sqrt( xv*xv + yv*yv )
+             */
+
+            //3d space
+            //xh = r * ( cos(N) * cos(v+w) - sin(N) * sin(v+w) * cos(i) )
+            //yh = r * ( sin(N) * cos(v+w) + cos(N) * sin(v+w) * cos(i) )
+            //zh = r * ( sin(v+w) * sin(i) )
+
+
         }
     }
 }
